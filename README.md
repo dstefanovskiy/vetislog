@@ -14,6 +14,19 @@ https://technet.microsoft.com/ru-ru/library/cc748993(v=ws.11).aspx
 https://www.osp.ru/winitpro/2012/08/13033295/
 
 
-Ежеминутный запуск задачи.
+Cоздание задания с помощью командной строки
 
-Такое расписание запускает задачу каждую минуту в течение всего дня.
+Откройте окно командной строки. Для этого в меню Пуск последовательно выберите пункты Все программы, Стандартные и Командная строка.
+
+Введите команду:
+
+        schtasks /Create [/S <system> [/U <username> [/P [<password>]]]]
+        [/RU <username> [/RP <password>]] /SC <schedule> [/MO <modifier>] [/D <day>]
+        [/M <months>] [/I <idletime>] /TN <taskname> /TR <taskrun> [/ST <starttime>]
+        [/RI <interval>] [ {/ET <endtime> | /DU <duration>} [/K] [/XML <xmlfile>] [/V1]]
+        [/SD <startdate>] [/ED <enddate>] [/IT] [/Z] [/F]
+
+Чтобы просмотреть справку для этой команды, введите:
+
+schtasks /Create /?
+
