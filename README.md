@@ -10,7 +10,8 @@
 
 https://technet.microsoft.com/ru-ru/library/cc748993(v=ws.11).aspx
 
-Подробнее 
+или 
+
 https://www.osp.ru/winitpro/2012/08/13033295/
 
 
