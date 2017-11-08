@@ -1,0 +1,13 @@
+D:\Projects\vetis_log\windows\VetisLog.Checker\bin\Debug\NLog.config
+D:\Projects\vetis_log\windows\VetisLog.Checker\bin\Debug\VetisLog.Checker.exe.config
+D:\Projects\vetis_log\windows\VetisLog.Checker\bin\Debug\VetisLog.Checker.exe
+D:\Projects\vetis_log\windows\VetisLog.Checker\bin\Debug\VetisLog.Checker.pdb
+D:\Projects\vetis_log\windows\VetisLog.Checker\bin\Debug\Newtonsoft.Json.dll
+D:\Projects\vetis_log\windows\VetisLog.Checker\bin\Debug\NLog.dll
+D:\Projects\vetis_log\windows\VetisLog.Checker\bin\Debug\VetisLog.dll
+D:\Projects\vetis_log\windows\VetisLog.Checker\bin\Debug\VetisLog.pdb
+D:\Projects\vetis_log\windows\VetisLog.Checker\bin\Debug\Newtonsoft.Json.xml
+D:\Projects\vetis_log\windows\VetisLog.Checker\bin\Debug\NLog.xml
+D:\Projects\vetis_log\windows\VetisLog.Checker\obj\Debug\VetisLog.Checker.csprojResolveAssemblyReference.cache
+D:\Projects\vetis_log\windows\VetisLog.Checker\obj\Debug\VetisLog.Checker.exe
+D:\Projects\vetis_log\windows\VetisLog.Checker\obj\Debug\VetisLog.Checker.pdb

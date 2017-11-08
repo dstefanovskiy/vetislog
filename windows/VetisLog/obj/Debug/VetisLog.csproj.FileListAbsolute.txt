@@ -1,0 +1,8 @@
+D:\Projects\vetis_log\windows\VetisLog\bin\Debug\VetisLog.dll
+D:\Projects\vetis_log\windows\VetisLog\bin\Debug\VetisLog.pdb
+D:\Projects\vetis_log\windows\VetisLog\bin\Debug\Newtonsoft.Json.dll
+D:\Projects\vetis_log\windows\VetisLog\bin\Debug\NLog.dll
+D:\Projects\vetis_log\windows\VetisLog\bin\Debug\Newtonsoft.Json.xml
+D:\Projects\vetis_log\windows\VetisLog\bin\Debug\NLog.xml
+D:\Projects\vetis_log\windows\VetisLog\obj\Debug\VetisLog.dll
+D:\Projects\vetis_log\windows\VetisLog\obj\Debug\VetisLog.pdb
