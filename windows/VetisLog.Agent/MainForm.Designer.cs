@@ -32,25 +32,20 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.NotifyIconMain = new System.Windows.Forms.NotifyIcon(this.components);
             this.PanelMain = new System.Windows.Forms.Panel();
-            this.LabelRegions = new System.Windows.Forms.Label();
-            this.ComboBoxRegions = new System.Windows.Forms.ComboBox();
+            this.textBoxLog = new System.Windows.Forms.TextBox();
+            this.GroupBoxScheduler = new System.Windows.Forms.GroupBox();
             this.ComboBoxCron = new System.Windows.Forms.ComboBox();
             this.LabelCron = new System.Windows.Forms.Label();
-            this.ComboBoxLogs = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.ButtonSetScheduler = new System.Windows.Forms.Button();
-            this.ButtonClearScheduler = new System.Windows.Forms.Button();
-            this.ButtonPath = new System.Windows.Forms.Button();
-            this.DataGridView = new System.Windows.Forms.DataGridView();
-            this.LabelHistory = new System.Windows.Forms.Label();
-            this.DateTime = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Result = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.TextBoxPath = new System.Windows.Forms.TextBox();
-            this.LabelPath = new System.Windows.Forms.Label();
-            this.GroupBoxScheduler = new System.Windows.Forms.GroupBox();
+            this.ComboBoxRegions = new System.Windows.Forms.ComboBox();
+            this.LabelRegions = new System.Windows.Forms.Label();
+            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ContextMenuStripMain = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.RestoreToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CloseToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timerLoadInfo = new System.Windows.Forms.Timer(this.components);
             this.PanelMain.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGridView)).BeginInit();
             this.GroupBoxScheduler.SuspendLayout();
+            this.ContextMenuStripMain.SuspendLayout();
             this.SuspendLayout();
             // 
             // NotifyIconMain
@@ -62,33 +57,54 @@
             // PanelMain
             // 
             this.PanelMain.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.PanelMain.Controls.Add(this.LabelPath);
-            this.PanelMain.Controls.Add(this.TextBoxPath);
-            this.PanelMain.Controls.Add(this.LabelHistory);
-            this.PanelMain.Controls.Add(this.DataGridView);
-            this.PanelMain.Controls.Add(this.ButtonPath);
-            this.PanelMain.Controls.Add(this.ButtonSetScheduler);
-            this.PanelMain.Controls.Add(this.ComboBoxLogs);
-            this.PanelMain.Controls.Add(this.label1);
-            this.PanelMain.Controls.Add(this.ComboBoxCron);
-            this.PanelMain.Controls.Add(this.LabelCron);
-            this.PanelMain.Controls.Add(this.ComboBoxRegions);
-            this.PanelMain.Controls.Add(this.LabelRegions);
+            this.PanelMain.Controls.Add(this.textBoxLog);
             this.PanelMain.Controls.Add(this.GroupBoxScheduler);
+            this.PanelMain.Controls.Add(this.groupBox1);
             this.PanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.PanelMain.Location = new System.Drawing.Point(2, 2);
             this.PanelMain.Name = "PanelMain";
             this.PanelMain.Size = new System.Drawing.Size(561, 307);
             this.PanelMain.TabIndex = 0;
             // 
-            // LabelRegions
+            // textBoxLog
             // 
-            this.LabelRegions.AutoSize = true;
-            this.LabelRegions.Location = new System.Drawing.Point(12, 4);
-            this.LabelRegions.Name = "LabelRegions";
-            this.LabelRegions.Size = new System.Drawing.Size(47, 14);
-            this.LabelRegions.TabIndex = 0;
-            this.LabelRegions.Text = "Регион";
+            this.textBoxLog.Location = new System.Drawing.Point(224, 27);
+            this.textBoxLog.Multiline = true;
+            this.textBoxLog.Name = "textBoxLog";
+            this.textBoxLog.ReadOnly = true;
+            this.textBoxLog.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.textBoxLog.Size = new System.Drawing.Size(329, 269);
+            this.textBoxLog.TabIndex = 15;
+            // 
+            // GroupBoxScheduler
+            // 
+            this.GroupBoxScheduler.Controls.Add(this.ComboBoxCron);
+            this.GroupBoxScheduler.Controls.Add(this.LabelCron);
+            this.GroupBoxScheduler.Controls.Add(this.ComboBoxRegions);
+            this.GroupBoxScheduler.Controls.Add(this.LabelRegions);
+            this.GroupBoxScheduler.Location = new System.Drawing.Point(12, 5);
+            this.GroupBoxScheduler.Name = "GroupBoxScheduler";
+            this.GroupBoxScheduler.Size = new System.Drawing.Size(198, 291);
+            this.GroupBoxScheduler.TabIndex = 14;
+            this.GroupBoxScheduler.TabStop = false;
+            this.GroupBoxScheduler.Text = "Планировщик";
+            // 
+            // ComboBoxCron
+            // 
+            this.ComboBoxCron.FormattingEnabled = true;
+            this.ComboBoxCron.Location = new System.Drawing.Point(6, 99);
+            this.ComboBoxCron.Name = "ComboBoxCron";
+            this.ComboBoxCron.Size = new System.Drawing.Size(176, 22);
+            this.ComboBoxCron.TabIndex = 3;
+            // 
+            // LabelCron
+            // 
+            this.LabelCron.AutoSize = true;
+            this.LabelCron.Location = new System.Drawing.Point(6, 79);
+            this.LabelCron.Name = "LabelCron";
+            this.LabelCron.Size = new System.Drawing.Size(117, 14);
+            this.LabelCron.TabIndex = 2;
+            this.LabelCron.Text = "Частота вызова API";
             // 
             // ComboBoxRegions
             // 
@@ -99,147 +115,55 @@
             "Регион 3",
             "Регион 4",
             "Регион 5"});
-            this.ComboBoxRegions.Location = new System.Drawing.Point(12, 22);
+            this.ComboBoxRegions.Location = new System.Drawing.Point(6, 44);
             this.ComboBoxRegions.Name = "ComboBoxRegions";
-            this.ComboBoxRegions.Size = new System.Drawing.Size(190, 22);
+            this.ComboBoxRegions.Size = new System.Drawing.Size(176, 22);
             this.ComboBoxRegions.TabIndex = 1;
             // 
-            // ComboBoxCron
+            // LabelRegions
             // 
-            this.ComboBoxCron.FormattingEnabled = true;
-            this.ComboBoxCron.Items.AddRange(new object[] {
-            "1 минута",
-            "5 минут",
-            "10 минут"});
-            this.ComboBoxCron.Location = new System.Drawing.Point(12, 78);
-            this.ComboBoxCron.Name = "ComboBoxCron";
-            this.ComboBoxCron.Size = new System.Drawing.Size(190, 22);
-            this.ComboBoxCron.TabIndex = 3;
+            this.LabelRegions.AutoSize = true;
+            this.LabelRegions.Location = new System.Drawing.Point(6, 25);
+            this.LabelRegions.Name = "LabelRegions";
+            this.LabelRegions.Size = new System.Drawing.Size(47, 14);
+            this.LabelRegions.TabIndex = 0;
+            this.LabelRegions.Text = "Регион";
             // 
-            // LabelCron
+            // groupBox1
             // 
-            this.LabelCron.AutoSize = true;
-            this.LabelCron.Location = new System.Drawing.Point(12, 60);
-            this.LabelCron.Name = "LabelCron";
-            this.LabelCron.Size = new System.Drawing.Size(117, 14);
-            this.LabelCron.TabIndex = 2;
-            this.LabelCron.Text = "Частота вызова API";
+            this.groupBox1.Location = new System.Drawing.Point(217, 4);
+            this.groupBox1.Name = "groupBox1";
+            this.groupBox1.Size = new System.Drawing.Size(339, 293);
+            this.groupBox1.TabIndex = 15;
+            this.groupBox1.TabStop = false;
+            this.groupBox1.Text = "Лог вызовов";
             // 
-            // ComboBoxLogs
+            // ContextMenuStripMain
             // 
-            this.ComboBoxLogs.ForeColor = System.Drawing.Color.Black;
-            this.ComboBoxLogs.FormattingEnabled = true;
-            this.ComboBoxLogs.Items.AddRange(new object[] {
-            "1 минута",
-            "5 минут",
-            "10 минут"});
-            this.ComboBoxLogs.Location = new System.Drawing.Point(12, 136);
-            this.ComboBoxLogs.Name = "ComboBoxLogs";
-            this.ComboBoxLogs.Size = new System.Drawing.Size(190, 22);
-            this.ComboBoxLogs.TabIndex = 5;
+            this.ContextMenuStripMain.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.RestoreToolStripMenuItem,
+            this.CloseToolStripMenuItem});
+            this.ContextMenuStripMain.Name = "ContextMenuStripMain";
+            this.ContextMenuStripMain.Size = new System.Drawing.Size(150, 48);
             // 
-            // label1
+            // RestoreToolStripMenuItem
             // 
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 118);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(131, 14);
-            this.label1.TabIndex = 4;
-            this.label1.Text = "Частота сброса логов";
+            this.RestoreToolStripMenuItem.Name = "RestoreToolStripMenuItem";
+            this.RestoreToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.RestoreToolStripMenuItem.Text = "Восстановить";
+            this.RestoreToolStripMenuItem.Click += new System.EventHandler(this.RestoreToolStripMenuItem_Click);
             // 
-            // ButtonSetScheduler
+            // CloseToolStripMenuItem
             // 
-            this.ButtonSetScheduler.FlatAppearance.BorderSize = 2;
-            this.ButtonSetScheduler.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonSetScheduler.Location = new System.Drawing.Point(18, 198);
-            this.ButtonSetScheduler.Name = "ButtonSetScheduler";
-            this.ButtonSetScheduler.Size = new System.Drawing.Size(176, 23);
-            this.ButtonSetScheduler.TabIndex = 6;
-            this.ButtonSetScheduler.Text = "Установить задания";
-            this.ButtonSetScheduler.UseVisualStyleBackColor = true;
+            this.CloseToolStripMenuItem.Name = "CloseToolStripMenuItem";
+            this.CloseToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.CloseToolStripMenuItem.Text = "Закрыть";
+            this.CloseToolStripMenuItem.Click += new System.EventHandler(this.CloseToolStripMenuItem_Click);
             // 
-            // ButtonClearScheduler
+            // timerLoadInfo
             // 
-            this.ButtonClearScheduler.FlatAppearance.BorderSize = 2;
-            this.ButtonClearScheduler.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonClearScheduler.Location = new System.Drawing.Point(6, 62);
-            this.ButtonClearScheduler.Name = "ButtonClearScheduler";
-            this.ButtonClearScheduler.Size = new System.Drawing.Size(176, 23);
-            this.ButtonClearScheduler.TabIndex = 7;
-            this.ButtonClearScheduler.Text = "Очистить все задания";
-            this.ButtonClearScheduler.UseVisualStyleBackColor = true;
-            // 
-            // ButtonPath
-            // 
-            this.ButtonPath.FlatAppearance.BorderSize = 2;
-            this.ButtonPath.FlatStyle = System.Windows.Forms.FlatStyle.System;
-            this.ButtonPath.Location = new System.Drawing.Point(503, 21);
-            this.ButtonPath.Name = "ButtonPath";
-            this.ButtonPath.Size = new System.Drawing.Size(46, 23);
-            this.ButtonPath.TabIndex = 8;
-            this.ButtonPath.Text = "...";
-            this.ButtonPath.UseVisualStyleBackColor = true;
-            this.ButtonPath.Click += new System.EventHandler(this.ButtonPath_Click);
-            // 
-            // DataGridView
-            // 
-            this.DataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.DataGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.DateTime,
-            this.Result});
-            this.DataGridView.Location = new System.Drawing.Point(226, 78);
-            this.DataGridView.Name = "DataGridView";
-            this.DataGridView.Size = new System.Drawing.Size(323, 208);
-            this.DataGridView.TabIndex = 10;
-            // 
-            // LabelHistory
-            // 
-            this.LabelHistory.AutoSize = true;
-            this.LabelHistory.Location = new System.Drawing.Point(223, 60);
-            this.LabelHistory.Name = "LabelHistory";
-            this.LabelHistory.Size = new System.Drawing.Size(104, 14);
-            this.LabelHistory.TabIndex = 11;
-            this.LabelHistory.Text = "История вызовов";
-            // 
-            // DateTime
-            // 
-            this.DateTime.HeaderText = "Время отравки";
-            this.DateTime.MinimumWidth = 150;
-            this.DateTime.Name = "DateTime";
-            this.DateTime.ReadOnly = true;
-            this.DateTime.Width = 150;
-            // 
-            // Result
-            // 
-            this.Result.HeaderText = "Результат";
-            this.Result.Name = "Result";
-            this.Result.ReadOnly = true;
-            // 
-            // TextBoxPath
-            // 
-            this.TextBoxPath.Location = new System.Drawing.Point(226, 22);
-            this.TextBoxPath.Name = "TextBoxPath";
-            this.TextBoxPath.Size = new System.Drawing.Size(271, 22);
-            this.TextBoxPath.TabIndex = 12;
-            // 
-            // LabelPath
-            // 
-            this.LabelPath.AutoSize = true;
-            this.LabelPath.Location = new System.Drawing.Point(223, 5);
-            this.LabelPath.Name = "LabelPath";
-            this.LabelPath.Size = new System.Drawing.Size(138, 14);
-            this.LabelPath.TabIndex = 13;
-            this.LabelPath.Text = "Путь к корневой папке";
-            // 
-            // GroupBoxScheduler
-            // 
-            this.GroupBoxScheduler.Controls.Add(this.ButtonClearScheduler);
-            this.GroupBoxScheduler.Location = new System.Drawing.Point(12, 165);
-            this.GroupBoxScheduler.Name = "GroupBoxScheduler";
-            this.GroupBoxScheduler.Size = new System.Drawing.Size(190, 121);
-            this.GroupBoxScheduler.TabIndex = 14;
-            this.GroupBoxScheduler.TabStop = false;
-            this.GroupBoxScheduler.Text = "Планировщик заданий";
+            this.timerLoadInfo.Interval = 1000;
+            this.timerLoadInfo.Tick += new System.EventHandler(this.timerLoadInfo_Tick);
             // 
             // MainForm
             // 
@@ -257,13 +181,14 @@
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Vetis Log";
-            this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.Resize += new System.EventHandler(this.MainForm_Resize);
             this.PanelMain.ResumeLayout(false);
             this.PanelMain.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.DataGridView)).EndInit();
             this.GroupBoxScheduler.ResumeLayout(false);
+            this.GroupBoxScheduler.PerformLayout();
+            this.ContextMenuStripMain.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -276,18 +201,13 @@
         private System.Windows.Forms.ComboBox ComboBoxRegions;
         private System.Windows.Forms.ComboBox ComboBoxCron;
         private System.Windows.Forms.Label LabelCron;
-        private System.Windows.Forms.ComboBox ComboBoxLogs;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button ButtonSetScheduler;
-        private System.Windows.Forms.Button ButtonClearScheduler;
-        private System.Windows.Forms.Button ButtonPath;
-        private System.Windows.Forms.Label LabelHistory;
-        private System.Windows.Forms.DataGridView DataGridView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn DateTime;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Result;
-        private System.Windows.Forms.Label LabelPath;
-        private System.Windows.Forms.TextBox TextBoxPath;
         private System.Windows.Forms.GroupBox GroupBoxScheduler;
+        private System.Windows.Forms.ContextMenuStrip ContextMenuStripMain;
+        private System.Windows.Forms.ToolStripMenuItem RestoreToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem CloseToolStripMenuItem;
+        private System.Windows.Forms.Timer timerLoadInfo;
+        private System.Windows.Forms.TextBox textBoxLog;
+        private System.Windows.Forms.GroupBox groupBox1;
     }
 }
 

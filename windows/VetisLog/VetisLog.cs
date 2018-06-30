@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -8,33 +8,35 @@ using System.Text;
 using System.Xml.Linq;
 using Newtonsoft.Json;
 using NLog;
+using NLog.Internal;
 
 namespace VetisLog
 {
     public class VetisLog
     {
-        Logger _logger = LogManager.GetCurrentClassLogger();
+        public readonly Logger Logger = LogManager.GetCurrentClassLogger();
 
-        public void Ping()
+        public LogInfo Ping()
         {
-            _logger.Info("Start");
+            LogInfo result;
 
-            _logger.Info("Getting IP...");
+            Logger.Info("Start");
+
+            Logger.Info("Getting IP...");
             var ip = GetIp();
-            _logger.Info("Getting OK");
+            Logger.Info("Getting OK");
 
             var start = DateTime.Now;
             DateTime end;
             
             var stopwatch = Stopwatch.StartNew();
 
-            _logger.Info("Start calling Web service...");
+            Logger.Info("Start calling Web service...");
 
-            HttpStatusCode code;
             var response = new Response {ip = ip};
-            var responseXml = SoapCaller.CallWebService(out code);
+            var responseXml = SoapCaller.CallWebService(out var code);
 
-            _logger.Info("Start calling Web service OK");
+            Logger.Info("Start calling Web service OK");
 
             XNamespace ent = "http://api.vetrf.ru/schema/cdm/cerberus/enterprise";
             var enterpriseList = responseXml.Descendants(ent + "enterpriseList").FirstOrDefault();
@@ -50,9 +52,9 @@ namespace VetisLog
                 response.http = Convert.ToInt32(code).ToString();
                 response.msec = elapsed.ToString("F");
                 response.uuid = "";
-                Send(response);
-                _logger.Info("ent:enterpriseList is not found");
-                return;
+                result = Send(response);
+                Logger.Info("ent:enterpriseList is not found");
+                return result;
             }
 
             if (enterprise == null)
@@ -65,9 +67,9 @@ namespace VetisLog
                 response.http = Convert.ToInt32(code).ToString();
                 response.msec = elapsed.ToString("F");
                 response.uuid = "";
-                Send(response);
-                _logger.Info("ent:enterprise is not found");
-                return;
+                result = Send(response);
+                Logger.Info("ent:enterprise is not found");
+                return result;
             }
 
             var countAttribute = enterpriseList.Attribute("count");
@@ -81,9 +83,9 @@ namespace VetisLog
                 response.http = Convert.ToInt32(code).ToString();
                 response.msec = elapsed.ToString("F");
                 response.uuid = "";
-                Send(response);
-                _logger.Info("ent:enterpriseList @count is not found");
-                return;
+                result = Send(response);
+                Logger.Info("ent:enterpriseList @count is not found");
+                return result;
             }
 
             int count;
@@ -97,9 +99,9 @@ namespace VetisLog
                 response.http = Convert.ToInt32(code).ToString();
                 response.msec = elapsed.ToString("F");
                 response.uuid = "";
-                Send(response);
-                _logger.Info("ent:enterpriseList @count is not integer value or 0");
-                return;
+                result = Send(response);
+                Logger.Info("ent:enterpriseList @count is not integer value or 0");
+                return result;
             }
 
             XNamespace bs = "http://api.vetrf.ru/schema/cdm/base";
@@ -114,9 +116,9 @@ namespace VetisLog
                 response.http = Convert.ToInt32(code).ToString();
                 response.msec = elapsed.ToString("F");
                 response.uuid = "";
-                Send(response);
-                _logger.Info("ent:enterprise bs:uuid is not found");
-                return;
+                result = Send(response);
+                Logger.Info("ent:enterprise bs:uuid is not found");
+                return result;
             }
 
             var uuidValue = uiidElement.Value;
@@ -129,22 +131,92 @@ namespace VetisLog
             response.http = Convert.ToInt32(code).ToString();
             response.msec = elapsedOk.ToString("F");
             response.uuid = uuidValue;
-            Send(response);
-            _logger.Info("Evethings OK");
-            _logger.Info("Complete.");
+            result = Send(response);
+            Logger.Info("Evethings OK");
+            Logger.Info("Complete.");
 
+            return result;
         }
 
-        private static void Send(Response response)
+        private static LogInfo Send(Response response)
         {
-            using (var webClient = new WebClient())
+            var reestr = new ReestrHelper();
+            var urls = GetLogUrls().ToArray();
+            var currentUrl = "";
+
+            var result = new LogInfo
             {
-                var strJson = JsonConvert.SerializeObject(response);
-                webClient.Headers.Add(HttpRequestHeader.ContentType, "application/json");
-                webClient.UploadString("http://37.230.112.10:9191/save", "POST", strJson);
+                Date = DateTime.Now,
+                Region = "",
+                HasError = false,
+                Error = "",
+                HttpStatus = 0
+            };
+
+            try
+            {
+                // send request
+
+
+                var region = reestr.Read("region")?.ToString();
+                if (string.IsNullOrEmpty(region))
+                {
+                    region = "Unknown";
+                }
+
+                response.region = region;
+                if (string.IsNullOrEmpty(response.error))
+                {
+                    response.error = "0";
+                }
+
+                using (var webClient = new WebClient())
+                {
+                    
+                    foreach (var url in urls)
+                    {
+                        currentUrl = url;
+                        var strJson = JsonConvert.SerializeObject(response);
+                        webClient.Headers.Add(HttpRequestHeader.ContentType, "application/json");
+                        webClient.Headers.Add(HttpRequestHeader.ContentEncoding, "utf-8");
+                        webClient.Encoding = Encoding.UTF8;
+                        result.Result = webClient.UploadString(url, "POST", strJson);
+                        Console.WriteLine(result.Result);
+                    }
+                }
+
+                result.Region = region;
+                result.Error = string.Empty;
+                result.HasError = false;
+                result.HttpStatus = 200;
             }
+            catch (WebException webEx)
+            {
+                currentUrl = !string.IsNullOrEmpty(currentUrl) ? currentUrl : "Empty URL";
+                result.Error = webEx.Message + Environment.NewLine + $"Url: {currentUrl}";
+                result.HasError = true;
+                var we = webEx;
+                var responseHttp = (HttpWebResponse) we.Response;
+                result.HttpStatus = Convert.ToInt32(responseHttp.StatusCode);
+                result.Result = string.Empty;
+            }
+            catch (Exception ex)
+            {
+                result.Error = ex.Message;
+                result.HasError = true;
+                result.HttpStatus = 500;
+                result.Result = string.Empty;
+            }
+
+            return result;
         }
-        
+
+        private static IEnumerable<string> GetLogUrls()
+        {
+            var configuration = new ConfigurationManager();
+            return configuration.AppSettings["urls"].Split(new[] {'|', ';', ','}).ToList();
+        }
+
 
         private static string GetIp()
         {

@@ -48,7 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LogInfo.cs" />
+    <Compile Include="ReestrHelper.cs" />
     <Compile Include="Response.cs" />
+    <Compile Include="SendLogCommand.cs" />
+    <Compile Include="SendLogCommandHandler.cs" />
     <Compile Include="SoapCaller.cs" />
     <Compile Include="VetisLog.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -10,5 +10,6 @@ namespace VetisLog
         public string msec { get; set; }
         public string http { get; set; }
         public string uuid { get; set; }
+        public string region { get; set; }
     }
 }

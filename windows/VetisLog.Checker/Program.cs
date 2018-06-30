@@ -1,16 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Runtime.InteropServices;
 using NLog;
 
 namespace VetisLog.Checker
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr GetConsoleWindow();
+        [DllImport("user32.dll")]
+        private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+        private const int SwHide = 0;
+
+        //const int SwShow = 5;
+
+
+        public static void Main(string[] args)
         {
+            var handle = GetConsoleWindow();
+            ShowWindow(handle, SwHide);
+
             var logger = LogManager.GetCurrentClassLogger();
             try
             {
@@ -21,6 +30,7 @@ namespace VetisLog.Checker
             {
                 logger.Error(ex);
             }
+            Console.WriteLine("Ok");
         }
     }
 }
